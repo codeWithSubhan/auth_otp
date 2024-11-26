@@ -87,12 +87,7 @@ export default function Profile() {
     try {
       const data = new FormData();
       Object.entries(formData).forEach(([key, value]) => {
-        if (
-          key === "contact" ||
-          key === "name" ||
-          key === "email" ||
-          key === "photo"
-        )
+        if (key === "contact" || key === "name" || key === "email")
           data.append(key, value);
       });
 
