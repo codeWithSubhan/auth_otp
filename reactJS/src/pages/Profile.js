@@ -86,10 +86,17 @@ export default function Profile() {
 
     try {
       const data = new FormData();
-      Object.entries(formData).forEach(([key, value]) =>
-        data.append(key, value)
-      );
+      Object.entries(formData).forEach(([key, value]) => {
+        if (
+          key === "contact" ||
+          key === "name" ||
+          key === "email" ||
+          key === "photo"
+        )
+          data.append(key, value);
+      });
 
+      console.log("image:", image);
       if (image) data.append("photo", image);
 
       const res = await fetch(`${BASE_URL}/api/users/updateMe`, {
