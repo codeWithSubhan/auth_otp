@@ -23,6 +23,7 @@ app.use(helmet());
 app.use(morgan("dev"));
 app.use(express.json());
 app.use(cookieParser());
+app.use(express.urlencoded({ extended: true, limit: "10kb" }));
 app.use(ExpressMongoSanitize());
 
 app.use((req, res, next) => {

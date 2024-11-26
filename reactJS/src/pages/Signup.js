@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import avatar from "../assets/avatar_2.jpeg";
+import avatar from "../assets/default.png";
 import toast, { Toaster } from "react-hot-toast";
 
 import style from "../style/signin.module.css";
@@ -94,7 +94,11 @@ export default function Signup() {
           <form className="py-1">
             <div className="profile flex justify-center py-4">
               <label htmlFor="profile">
-                <img src={avatar} className={style.profile_img} alt="avatar" />
+                <img
+                  src={localStorage.getItem("photo") || avatar}
+                  className={style.profile_img}
+                  alt="avatar"
+                />
               </label>
 
               <input

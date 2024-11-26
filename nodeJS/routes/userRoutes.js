@@ -13,8 +13,9 @@ router.post("/resetPassword/:OTP", authController.resetPassword);
 
 router.use(authController.protect);
 
+// prettier-ignore
+router.patch("/updateMe", userController.uploadUserPhoto, userController.resizeUserPhoto, userController.updateMe);
 router.get("/getMe", userController.getMe);
-router.patch("/updateMe", userController.updateMe);
 router.delete("/deleteMe", userController.deleteMe);
 
 module.exports = router;

@@ -1,5 +1,32 @@
+const multer = require("multer");
+const sharp = require("sharp");
+
 const User = require("../models/userModel");
 const catchAsync = require("../utiles/catchAsync");
+
+const storage = multer.memoryStorage();
+
+const fileFilter = (req, file, cb) => {
+  if (file.mimetype.startsWith("image")) cb(null, true);
+  else cb(new AppError("Invalid image", 400), false);
+};
+
+const upload = multer({ storage, fileFilter });
+exports.uploadUserPhoto = upload.single("photo");
+
+exports.resizeUserPhoto = catchAsync(async (req, res, next) => {
+  if (!req.file) return next();
+
+  req.file.filename = `${req.user.id}.jpeg`;
+
+  await sharp(req.file.buffer)
+    .resize(500, 500)
+    .toFormat("jpeg")
+    .jpeg({ quality: 90 })
+    .toFile(`images/${req.file.filename}`);
+
+  next();
+});
 
 const filterObj = (obj, ...allowFileds) => {
   const newObj = {};
@@ -26,6 +53,11 @@ exports.getMe = catchAsync(async (req, res, next) => {
 
 exports.updateMe = catchAsync(async (req, res, next) => {
   const filteredBody = filterObj(req.body, "email", "name", "contact");
+  if (req.file) {
+    filteredBody.photo = `${req.protocol}://${req.get("host")}/images/${
+      req.file.filename
+    }`;
+  }
 
   console.log("filteredBody:", filteredBody);
 

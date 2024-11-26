@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import avatar from "../assets/avatar_2.jpeg";
+import avatar from "../assets/default.png";
 import toast from "react-hot-toast";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
@@ -17,11 +17,16 @@ export default function Profile() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { token } = useSelector((state) => state.auth);
+  const [image, setImage] = useState("");
+  const [preview, setPreview] = useState(
+    localStorage.getItem("photo", image) || ""
+  );
   const { formData, handleChange, setFormData } = useForm({
     email: "",
     name: "",
     password: "********",
     contact: "",
+    photo: "",
   });
 
   const inputFields = [
@@ -48,6 +53,19 @@ export default function Profile() {
     },
   ];
 
+  function handleFile(e) {
+    const file = e.target.files[0];
+    setImage(file);
+
+    const reader = new FileReader();
+
+    reader.onload = function (e) {
+      setPreview(e.target.result);
+    };
+
+    reader.readAsDataURL(file);
+  }
+
   async function getUseData() {
     try {
       const res = await axios.get(`${BASE_URL}/api/users/getMe`, {
@@ -67,18 +85,25 @@ export default function Profile() {
     e.preventDefault();
 
     try {
+      const data = new FormData();
+      Object.entries(formData).forEach(([key, value]) =>
+        data.append(key, value)
+      );
+
+      if (image) data.append("photo", image);
+
       const res = await fetch(`${BASE_URL}/api/users/updateMe`, {
         method: "PATCH",
         headers: {
-          "Content-Type": "application/json",
           authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(formData),
+        body: data,
       });
 
       const result = await res.json();
 
       if (result.status === "success") {
+        if (preview) localStorage.setItem("photo", preview);
         return toast.success("Successfully upated data!");
       }
 
@@ -110,9 +135,9 @@ export default function Profile() {
         },
       });
       if (res.status === 204) {
-        toast.error("Successfully deleted account!");
-        navigate("/signup");
         dispatch(logout());
+        localStorage.removeItem("photo");
+        toast.error("Successfully deleted account!");
       }
     } catch (err) {
       toast.error(err.response.data.message);
@@ -134,14 +159,14 @@ export default function Profile() {
               <div className="profile flex justify-center py-4">
                 <label htmlFor="profile">
                   <img
-                    src={avatar}
+                    src={preview || avatar}
                     className={style.profile_img}
                     alt="avatar"
                   />
                 </label>
 
                 <input
-                  // onChange={onUpload}
+                  onChange={handleFile}
                   type="file"
                   id="profile"
                   name="profile"

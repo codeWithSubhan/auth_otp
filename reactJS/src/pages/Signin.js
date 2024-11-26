@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import toast from "react-hot-toast";
 import axios from "axios";
 
-import avatar from "../assets/avatar_2.jpeg";
+import avatar from "../assets/default.png";
 import style from "../style/signin.module.css";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
@@ -77,7 +77,11 @@ export default function Signin() {
           <form className="py-1">
             <div className="profile flex justify-center py-4">
               <label htmlFor="profile">
-                <img src={avatar} className={style.profile_img} alt="avatar" />
+                <img
+                  src={localStorage.getItem("photo") || avatar}
+                  className={style.profile_img}
+                  alt="avatar"
+                />
               </label>
 
               <input
