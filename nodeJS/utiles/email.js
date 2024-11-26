@@ -42,10 +42,18 @@ module.exports = class Email {
     await this.newTransport().sendMail(mailOptions);
   }
 
+  async sendWelcome() {
+    await this.send("welcome", "Welcome to Auth_OTP Wep App!");
+  }
+
   async sendPasswordReset() {
     await this.send(
       "passwordReset",
       "Your password reset token (valid for only 10 minutes)"
     );
+  }
+
+  async sendDeleteAccount() {
+    await this.send("delete", "Successfully Deleted Account!");
   }
 };

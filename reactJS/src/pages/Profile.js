@@ -140,7 +140,7 @@ export default function Profile() {
       });
       if (res.status === 204) {
         dispatch(logout());
-        toast.error("Successfully deleted account!");
+        toast.success("Successfully deleted account!");
       }
     } catch (err) {
       toast.error(err.response.data.message);

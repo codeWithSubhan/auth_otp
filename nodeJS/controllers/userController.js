@@ -1,10 +1,10 @@
 const multer = require("multer");
 const sharp = require("sharp");
+const storage = multer.memoryStorage();
 
 const User = require("../models/userModel");
 const catchAsync = require("../utiles/catchAsync");
-
-const storage = multer.memoryStorage();
+const Email = require("../utiles/email");
 
 const fileFilter = (req, file, cb) => {
   if (file.mimetype.startsWith("image")) cb(null, true);
@@ -80,6 +80,8 @@ exports.deleteMe = catchAsync(async (req, res, next) => {
   const user = await User.findByIdAndDelete(req.user.id);
 
   if (!user) return next(new AppError(`No user found!`, 404));
+
+  await new Email(user).sendDeleteAccount();
 
   res.status(204).json({
     status: "success",
