@@ -94,19 +94,10 @@ export default function Signup() {
           <form className="py-1">
             <div className="profile flex justify-center py-4">
               <label htmlFor="profile">
-                <img
-                  src={localStorage.getItem("photo") || avatar}
-                  className={style.profile_img}
-                  alt="avatar"
-                />
+                <img src={avatar} className={style.profile_img} alt="avatar" />
               </label>
 
-              <input
-                // onChange={onUpload}
-                type="file"
-                id="profile"
-                name="profile"
-              />
+              <input type="file" id="profile" name="profile" />
             </div>
             <div className="textbox flex flex-col  items-center gap-3">
               <div className="flex items-center gap-3">

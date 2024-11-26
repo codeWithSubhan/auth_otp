@@ -54,12 +54,12 @@ exports.getMe = catchAsync(async (req, res, next) => {
 });
 
 exports.updateMe = catchAsync(async (req, res, next) => {
-  const filteredBody = filterObj(req.body, "email", "name", "contact");
-  if (req.file) {
-    filteredBody.photo = `${req.protocol}://${req.get("host")}/images/${
-      req.file.filename
-    }`;
-  }
+  const filteredBody = filterObj(req.body, "email", "name", "contact", "photo");
+  // if (req.file) {
+  //   filteredBody.photo = `${req.protocol}://${req.get("host")}/images/${
+  //     req.file.filename
+  //   }`;
+  // }
 
   console.log("filteredBody:", filteredBody);
 

@@ -17,10 +17,7 @@ export default function Profile() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { token } = useSelector((state) => state.auth);
-  const [image, setImage] = useState("");
-  const [preview, setPreview] = useState(
-    localStorage.getItem("photo", image) || ""
-  );
+  // const [image, setImage] = useState("");
   const { formData, handleChange, setFormData } = useForm({
     email: "",
     name: "",
@@ -55,12 +52,13 @@ export default function Profile() {
 
   function handleFile(e) {
     const file = e.target.files[0];
-    setImage(file);
+    // setImage(file);
 
     const reader = new FileReader();
 
     reader.onload = function (e) {
-      setPreview(e.target.result);
+      // setPreview(e.target.result);
+      setFormData((prev) => ({ ...prev, photo: e.target.result }));
     };
 
     reader.readAsDataURL(file);
@@ -87,11 +85,17 @@ export default function Profile() {
     try {
       const data = new FormData();
       Object.entries(formData).forEach(([key, value]) => {
-        if (key === "contact" || key === "name" || key === "email")
+        if (
+          key === "contact" ||
+          key === "name" ||
+          key === "email" ||
+          key === "photo"
+        )
           data.append(key, value);
       });
 
-      if (image) data.append("photo", image);
+      // if (image) data.append("photo", image);
+      // if (preview) data.append("photo", preview);
 
       const res = await fetch(`${BASE_URL}/api/users/updateMe`, {
         method: "PATCH",
@@ -104,7 +108,6 @@ export default function Profile() {
       const result = await res.json();
 
       if (result.status === "success") {
-        if (preview) localStorage.setItem("photo", preview);
         return toast.success("Successfully upated data!");
       }
 
@@ -137,7 +140,6 @@ export default function Profile() {
       });
       if (res.status === 204) {
         dispatch(logout());
-        localStorage.removeItem("photo");
         toast.error("Successfully deleted account!");
       }
     } catch (err) {
@@ -160,7 +162,7 @@ export default function Profile() {
               <div className="profile flex justify-center py-4">
                 <label htmlFor="profile">
                   <img
-                    src={preview || avatar}
+                    src={formData.photo || avatar}
                     className={style.profile_img}
                     alt="avatar"
                   />

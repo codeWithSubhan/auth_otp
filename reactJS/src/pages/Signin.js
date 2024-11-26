@@ -77,11 +77,7 @@ export default function Signin() {
           <form className="py-1">
             <div className="profile flex justify-center py-4">
               <label htmlFor="profile">
-                <img
-                  src={localStorage.getItem("photo") || avatar}
-                  className={style.profile_img}
-                  alt="avatar"
-                />
+                <img src={avatar} className={style.profile_img} alt="avatar" />
               </label>
 
               <input

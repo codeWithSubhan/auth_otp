@@ -15,6 +15,7 @@ router.use(authController.protect);
 
 // prettier-ignore
 router.patch("/updateMe", userController.uploadUserPhoto, userController.resizeUserPhoto, userController.updateMe);
+// router.patch("/updateMe", userController.updateMe);
 router.get("/getMe", userController.getMe);
 router.delete("/deleteMe", userController.deleteMe);
 
