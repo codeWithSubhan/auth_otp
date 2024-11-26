@@ -91,7 +91,6 @@ export default function Profile() {
           data.append(key, value);
       });
 
-      console.log("image:", image);
       if (image) data.append("photo", image);
 
       const res = await fetch(`${BASE_URL}/api/users/updateMe`, {

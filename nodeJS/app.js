@@ -23,7 +23,7 @@ app.use(helmet());
 app.use(morgan("dev"));
 app.use(express.json());
 app.use(cookieParser());
-app.use(express.static(`${__dirname}/images`));
+app.use(express.static(`${__dirname}/public`));
 app.use(express.urlencoded({ extended: true, limit: "10kb" }));
 app.use(ExpressMongoSanitize());
 
